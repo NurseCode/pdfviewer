@@ -2,7 +2,7 @@
 $mysqli = mysqli_connect("localhost", "test", "test", "documents");
 
 $display_block = "<h1>My Documents</h1>
-<p>Select a document to see its items.</p>";
+<p>Select a document to view.</p>";
 
 //show categories first
  if(isset($_GET['search']) &&  $_GET['search']!='')
