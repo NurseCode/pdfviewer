@@ -1,0 +1,90 @@
+<?php
+$mysqli = mysqli_connect("localhost", "test", "test", "documents");
+
+$display_block = "<h1>My Documents</h1>
+<p>Select a document to see its items.</p>";
+
+//show categories first
+ if(isset($_GET['search']) &&  $_GET['search']!='')
+{
+
+ $search_query = "select * from posts where post_keywords like '%" .$search_id. "%' ";
+
+$run_query = mysql_query($search_query);
+
+    while ($search_row = mysql_fetch_array($run_query)){
+
+    $post_docid = $search_row['post_docid'];
+	$post_description = $search_row['post_description'];
+	$post_previewdoc = $search_row['previewdoc'];
+	$post_document = $search_row['document'];
+    $post_image = $search_row['post_image'];
+    $post_content = substr($search_row['post_content'],0,150);
+    }
+} 
+
+  $query = "SELECT previewdoc from document WHERE 'docid' = $docid";
+   $result = mysqli_query($con, $query);
+   $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+   $previewdoc = $row['previewdoc'];
+   echo $previewdoc;
+   
+if (mysqli_num_rows ($get_docid) < 1) {
+	$display_block = "<p><em>Sorry, no documents to browse.</em></p<";
+	} else {
+		while ($document = mysqli_fetch_array($get_document_res)) {
+			$docid = $row['docid'];
+			$previewdoc = $row['previewdoc'];
+			$docid_description = strtoupper(stripslashes($docid['docid_description']));
+			$docid_description = stripslashes($docid['docid_description']);
+			
+			$display_block .= "<p><strong><a href=\"". $_SERVER ['PHP_SELF'].
+			"?docid_id=".$docid_id."\">".$docid_description."</a></strong><br>".$docid_description."</p>";
+			
+			if(isset($_GET['docid_id']) && ($_GET['docid_id'] == $docid_id)) {
+				//create safe value for user_error
+				$safe_docid_id = mysqli_real_escape_string($mysqli, 
+				$_GET['docid_id']);
+				
+			 header("Content-type: application/pdf");
+   $docid = $_GET['id'];
+   $con = mysqli_connect("localhost", "test", "test", "documents") or die('');
+   
+				//get items
+				$get_items_sql = "SELECT docid, description, previewdoc, price
+				FROM documents WHERE
+				docid_docid = '".$docid_docid."' ORDER BY description";
+				$get_items_res = mysqli_query($mysqli, $get_items_sql)
+				or die(mysqli_error($mysqli));
+				
+				if(mysqli_num_rows($get_items_res) < 1) {
+					$display_block = "<p><em>Sorry, no documents to view.</em></p>";
+					} else {
+					$display_block .= "<ul>";
+					while ($items = mysqli_fetch_array($get_previewdoc)){
+						$docid_id = $docid['id'];
+						$item_description = stripslashes($items['item_description']);
+						$item_price = $items['item_price'];
+					}
+					$display_block .= "</ul>";
+		}
+		//free results
+		mysqli_free_result ($get_items_res);
+			}
+		}
+	}
+	?>
+	//free results
+	mysqli_free_result($get_cats_res);
+	//close connection to mySQL
+	mysql_close($mysqli);
+	
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+	<title>My Documents</title>
+	</head>
+	<body>
+	<?php echo $display_block; ?>
+	</body>
+	</html>
